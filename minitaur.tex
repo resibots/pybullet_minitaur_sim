@@ -1,0 +1,196 @@
+\documentclass [11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{tikz}
+\usepackage{amsmath}
+\usetikzlibrary{patterns}
+\title{Minitaur}
+\begin{document}
+\section*{Minitaur leg kinematics}
+The goal here is to find the motor angles $\theta_1$, $\theta_2$ to give to the two motors in order for the leg end point $M$ to reach the cartesian coordinates ($x_M$,$y_M$) \\
+You can see on the figure below a schematic of one of the minitaur leg segment :
+
+\pagestyle{empty}
+
+% Note. This illustration was originally made with PSTricks. Conversion to
+% PGF/TikZ was straightforward. However, I could probably have made it more
+% elegant.
+
+% Define a variable as a length
+% Input:
+%   #1 Variable name
+%   #2 Value
+%
+% Example:
+%   \nvar{\varx}{2cm}
+\newcommand{\nvar}[2]{%
+    \newlength{#1}
+    \setlength{#1}{#2}
+}
+
+% Define a few constants for drawing
+\nvar{\dg}{0.3cm}
+\def\dw{0.25}\def\dh{0.5}
+\nvar{\ddx}{1.5cm}
+
+% Define commands for links, joints and such
+\def\link{\draw [double distance=1.5mm, very thick] (0,0)--}
+\def\joint{%
+    \filldraw [fill=white] (0,0) circle (5pt);
+    \fill[black] circle (2pt);
+}
+\def\grip{%
+    \draw[ultra thick](0cm,\dg)--(0cm,-\dg);
+    \fill (0cm, 0.5\dg)+(0cm,1.5pt) -- +(0.6\dg,0cm) -- +(0pt,-1.5pt);
+    \fill (0cm, -0.5\dg)+(0cm,1.5pt) -- +(0.6\dg,0cm) -- +(0pt,-1.5pt);
+}
+\def\robotbase{%
+    \draw[rounded corners=8pt] (-\dw,-\dh)-- (-\dw, 0) --
+        (0,\dh)--(\dw,0)--(\dw,-\dh);
+    \draw (-0.5,-\dh)-- (0.5,-\dh);
+    \fill[pattern=north east lines] (-0.5,-1) rectangle (0.5,-\dh);
+}
+
+% Draw an angle annotation
+% Input:
+%   #1 Angle
+%   #2 Label
+% Example:
+%   \angann{30}{$\theta_1$}
+\newcommand{\angann}[2]{%
+    \begin{scope}[red]
+    \draw [->, black] (0,0) -- (0pt,1.2\ddx);
+    \node at (0pt,1.5\ddx) {x};
+    \draw [->, black] (0,0) -- (-1.2\ddx,0pt);
+    \node at (-1.5\ddx,0pt) {y};
+    \draw [->, shorten >=3.5pt] (0pt,\ddx) arc (90:#1:\ddx);
+    % Unfortunately automatic node placement on an arc is not supported yet.
+    % We therefore have to compute an appropriate coordinate ourselves.
+    \node at (#1/2-2:\ddx+8pt) {#2};
+    \end{scope}
+}
+
+% Draw line annotation
+% Input:
+%   #1 Line offset (optional)
+%   #2 Line angle
+%   #3 Line length
+%   #5 Line label
+% Example:
+%   \lineann[1]{30}{2}{$L_1$}
+\newcommand{\lineann}[4][0.5]{%
+    \begin{scope}[rotate=#2, blue,inner sep=2pt]
+        \draw[dashed, blue!40] (0,0) -- +(0,#1)
+            node [coordinate, near end] (a) {};
+        \draw[dashed, blue!40] (#3,0) -- +(0,#1)
+            node [coordinate, near end] (b) {};
+        \draw[|<->|] (a) -- node[fill=white] {#4} (b);
+    \end{scope}
+}
+
+% Define the kinematic parameters of the three link manipulator.
+\def\thetaone{210}
+\def\Lone{2}
+\def\thetatwo{100}
+\def\Ltwo{4}
+\def\thetathree{30}
+\def\Lthree{1}
+
+\begin{tikzpicture}
+
+    \filldraw [fill=black] (0,0) circle (2pt);
+    
+    \filldraw [fill=white] (-2,4) circle (5pt);
+    \filldraw [fill=black] (-2,4) circle (2pt);
+    
+    \filldraw [fill=white] (0,6) circle (5pt);
+    \filldraw [fill=black] (0,6) circle (2pt);
+    
+    \draw[black] (0,0) -- (-2,4);
+    \draw[black] (0,6)  -- (-2,4);
+    \draw[->,red] (-2,4) -- (-3,3) ;
+    
+    \draw[->,blue] (0,6) -- (0,8);
+    \node[blue] at (0,8.5) {x};
+    \draw[->,blue] (0,6) -- (-2,6);
+    \node[blue] at (-2.5,6) {y};
+    
+    \node at (-0.5,-0.5) {M};
+    
+    \draw [->, shorten >=3.5pt,red] (0,7) arc (90:215:\ddx);
+    
+    \draw [->, shorten >=3.5pt,red] (-2.5,3.5) arc (215:320:0.5);
+    
+    \node[red] at (-2,3) {$\alpha_1$};
+    
+    \node[red] at (-1.5,6.5) {$\theta_1$};
+    
+    \node[black] at (-0.5,2) {$l2$};
+    \node[black] at (-0.5,5) {$l1$};
+
+    %\robotbase
+   % \angann{\thetaone}{$\theta_1$}
+    %\lineann[0.7]{\thetaone}{\Lone}{$L_1$}
+    %\link(\thetaone:\Lone);
+    %\joint
+    
+\end{tikzpicture}
+\linebreak
+Now we can write :\\\\
+$x_M = l_1*cos(\theta_1) + l_2*cos(\theta_1 + \alpha_1)$\\
+$y_M = l_1*sin(\theta_1) + l_2*sin(\theta_1 + \alpha_1)$\\
+\linebreak
+If we take the polar coordinates of M ($r,\alpha_M$) : \\\\
+\linebreak
+$r^2 = l_1^2cos^2(\theta_1) + l_2^2cos^2(\theta_1 + \alpha_1) + 2l_1l_2cos(\theta_1)cos(\theta_1+\alpha_1) +$\\
+$l_1^2sin^2(\theta_1) + l_2^2sin^2(\theta_1 + \alpha_1) + 2l_1l_2sin(\theta_1)sin(\theta_1+\alpha_1)$\\
+\linebreak
+$r^2 = l_1^2 + l_2^2 + 2l_1l_2[cos(\theta_1)[cos(\theta_1)cos(\alpha_1) -sin(\theta_1)sin(\alpha_1)] + sin(\theta_1)[sin(\theta_1)cos(\alpha_1) + sin(\alpha_1)cos(\theta_1)]]$\\
+\linebreak
+$r^2 = l_1^2 + l_2^2 + 2l_1l_2[cos^2(\theta_1)*cos(\alpha_1) + sin^2(\theta_1)*cos(\alpha_1)]$\\
+\linebreak
+$r^2 = l_1^2 + l_2^2 + 2l_1l_2cos(\alpha_1)$\\
+\linebreak
+Hence we have :
+\begin{equation}\label{eqn:res1}
+     \boxed{\alpha_1 = acos(\frac{r^2-l_1^2-l_2^2}{2l_1l_2})}
+\end{equation}
+\linebreak
+Now we can find $\theta_1$ :\\
+\linebreak
+$x_M = l_1*cos(\theta_1) + l_2*cos(\theta_1 + \alpha_1)$\\
+$y_M = l_1*sin(\theta_1) + l_2*sin(\theta_1 + \alpha_1)$\\
+\linebreak
+$x_M = l_1*cos(\theta_1) + l_2*[cos(\theta_1)cos(\alpha_1)-sin(\theta_1)sin(\alpha_1)]$\\
+$y_M = l_1*sin(\theta_1) + l_2*[sin(\theta_1)cos(\alpha_1) + sin(\theta_1)sin(\alpha_1)]$\\
+\linebreak
+$x_M = cos(\theta_1)[l_1 + l_2cos(\alpha_1)] + sin(\theta_1)[-l_2*sin(\alpha_1)]$\\
+$y_M = cos(\theta_1)[l_2*sin(\alpha_1)] + sin(\theta_1)[l_1 + l_2cos(\alpha_1)]$\\
+\linebreak
+$x_M = r_1cos(\theta_1) - r_2sin(\theta_1)$\\
+$y_M = r_2cos(\theta_1) + r_1sin(\theta_1)$\\\\
+With :
+\begin{equation}\label{eqn:res2}
+     \boxed{r_1 = l_1 + l_2cos(\alpha_1)}
+\end{equation}
+\begin{equation}\label{eqn:res2}
+     \boxed{r_2 = l_2*sin(\alpha_1)}
+\end{equation}
+\linebreak
+$r_1x_M = r^2_1cos(\theta_1) - r_1r_2sin(\theta_1)$\\
+$r_2y_M = r^1_2cos(\theta_1) + r_1r_1sin(\theta_1)$\\
+\linebreak
+$r_1x_M + r_2y_M = (r^2_1+r^2_2)cos(\theta_1)$\\
+\linebreak
+\begin{equation}\label{eqn:res2}
+     \boxed{\theta_1 = acos(\frac{r_1x_M+r_2y_M}{r^2_1+r^2_2})}
+\end{equation}
+Now for the second leg segment and by symmetry we will have the same formulas. Nevertheless the y axis will be in an opposite direction. (Indeed the motor of the second leg segment is facing the motor of the first leg segment). We will then have to use ($x_M$,$-y_M$) has a desired end leg position. Hence we have :
+
+\begin{equation}\label{eqn:res1}
+     \boxed{\alpha_2 = \alpha_1}
+\end{equation}
+\begin{equation}\label{eqn:res1}
+     \boxed{\theta_2 = acos(\frac{r_1x_M-r_2y_M}{r^2_1+r^2_2})}
+\end{equation}
+
+\end{document}
