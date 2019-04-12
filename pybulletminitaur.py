@@ -1,3 +1,19 @@
+#! /usr/bin/env python
+#| This file is a part of the minitaur pybullet env available at :
+#| https://github.com/bulletphysics/bullet3/tree/master/examples/pybullet/gym/pybullet_envs/minitaur/envs
+#| Google Brain   X    Google DeepMind
+#|
+#| Authors :
+#|    Tingnan Zhang
+#|    Erwin Coumans
+#|    Atil Iscen
+#|    Yunfei Bai
+#|    Danijar Hafner
+#|    Steven Bohez
+#|    Vincent Vanhoucke
+#|
+#| RSS paper "Sim-to-Real: Learning Agile Locomotion For Quadruped Robots":
+#|
 """This file implements the functionalities of a minitaur using pybullet.
 
 """
