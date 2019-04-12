@@ -51,7 +51,7 @@ You can use the eval_minitaur function from simulator_map_elites_damaged.py to r
 
  Here the left front leg is blocked in a fully retracted and perpendicular to the ground position.
 
-simulator_map_elites_damaged.py is the file that is used by the [pyite](https://gitlab.inria.fr/resibots/pyite.git) package
+simulator_map_elites_damaged.py is the file that is used by the [pyite](https://github.com/resibots/pyite.git) package
 
 ## Minitaur leg kinematics
 
