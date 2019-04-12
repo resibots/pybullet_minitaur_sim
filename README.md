@@ -32,7 +32,7 @@ python simulation.py path_to_centroid_file path_to_archive_file
 ```
 
 
-### Create map elites maps
+### Create map elites maps
 
 
 ```
@@ -55,7 +55,7 @@ If you use this code in a scientific paper, please cite:
 **Variation operator**: Vassiliades V, Mouret JB. Discovering the Elite Hypervolume by Leveraging Interspecies Correlation. Proc. of GECCO 2018.
 
 
-###  Launch a simple simulation with a damaged minitaur
+### Launch a simple simulation with a damaged minitaur
 
 You can use the eval_minitaur function from simulator_map_elites_damaged.py to run a simulation with a damage.
 
