@@ -17,7 +17,7 @@ Clone this repository and run :
 
 ## How to use this package ?
 
-### Launch a simple simulation
+### Launch a simple simulation
 
 ```
 python simulation.py
